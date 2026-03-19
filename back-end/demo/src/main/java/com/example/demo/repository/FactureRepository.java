@@ -1,0 +1,23 @@
+package com.example.demo.repository;
+
+import com.example.demo.model.Facture;
+import com.example.demo.model.Locataires;
+import com.example.demo.model.enems.StatutFacture;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.UUID;
+
+@Repository
+public interface FactureRepository extends JpaRepository<Facture, UUID> {
+
+    List<Facture> findByStatut(StatutFacture statut);
+
+    List<Facture> findByLocataire(Locataires locataire);
+
+    List<Facture> findByLocataire_Id(UUID locataireId);
+
+    List<Facture> findByAppartement_Id(UUID appartementId);
+}
