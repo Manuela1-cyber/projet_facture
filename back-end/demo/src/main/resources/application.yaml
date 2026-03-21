@@ -5,12 +5,10 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/springboot
     username: root
-    password: ""
+    password: "LAmenace045!@"
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-
-    
