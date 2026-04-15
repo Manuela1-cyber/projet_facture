@@ -17,7 +17,6 @@ public record FactureCreateRequest(
         Double prixM3,
         @NotNull TypeFacture type,
         @NotNull StatutFacture statut,
-        @NotNull UUID locataireId,
-        @NotNull UUID appartementId
+        @NotNull UUID assignerId
 ) {}
 

@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Locataires extends BaseUUIDEntity {
+public class Locataires extends BaseEntity {
 
     @Column(nullable = false)
     private String name;

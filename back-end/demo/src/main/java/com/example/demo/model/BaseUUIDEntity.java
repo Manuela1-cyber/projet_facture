@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseUUIDEntity extends BaseEntity{
+public abstract class BaseUUIDEntity{
 
 @Id
 @GeneratedValue(strategy = GenerationType.UUID)

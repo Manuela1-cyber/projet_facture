@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Proprietes extends BaseUUIDEntity { 
+public class Proprietes extends BaseEntity { 
 
     @Column(nullable = false)
     private String residence;

@@ -16,6 +16,6 @@ public record FactureResponse(
         Double prixM3,
         TypeFacture type,
         StatutFacture statut,
-        UUID locataireId,
-        UUID appartementId
+        UUID assignerId
+        
 ) {}

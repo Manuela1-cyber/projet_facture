@@ -16,7 +16,7 @@ public class Appartement extends BaseUUIDEntity {
     private String nom;
 
     @ManyToOne
-    @JoinColumn(name = "locataire_id", nullable = false)
+    @JoinColumn(name = "locataire_id")
     private Locataires locataire;
 
     @ManyToOne

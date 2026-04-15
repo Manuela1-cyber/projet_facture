@@ -4,5 +4,6 @@ import java.util.UUID;
 
 public record ProprieteResponse(
         UUID id,
-        String residence
+        String residence,
+        int unites
 ) {}

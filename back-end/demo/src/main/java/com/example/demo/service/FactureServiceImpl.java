@@ -11,28 +11,26 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.controller.payload.FactureCreateRequest;
 import com.example.demo.controller.payload.FactureResponse;
 import com.example.demo.controller.payload.FactureUpdateRequest;
-import com.example.demo.model.Appartement;
+import com.example.demo.model.Assigner;
 import com.example.demo.model.Facture;
-import com.example.demo.model.Locataires;
-import com.example.demo.repository.AppartementRepository;
+import com.example.demo.repository.AssignerRepository;
 import com.example.demo.repository.FactureRepository;
-import com.example.demo.repository.LocatairesRepository;
+
 
 @Service
 public class FactureServiceImpl implements FactureService {
 
     private final FactureRepository factureRepository;
-    private final LocatairesRepository locatairesRepository;
-    private final AppartementRepository appartementRepository;
+    private final AssignerRepository assignerRepository;
+ 
 
     public FactureServiceImpl(
             FactureRepository factureRepository,
-            LocatairesRepository locatairesRepository,
-            AppartementRepository appartementRepository
+            AssignerRepository assignerRepository
+        
     ) {
         this.factureRepository = factureRepository;
-        this.locatairesRepository = locatairesRepository;
-        this.appartementRepository = appartementRepository;
+        this.assignerRepository = assignerRepository;
     }
 
     @Override
@@ -51,10 +49,9 @@ public class FactureServiceImpl implements FactureService {
     @Override
     @Transactional
     public FactureResponse create(FactureCreateRequest request) {
-        Locataires locataire = locatairesRepository.findById(request.locataireId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "locataireId invalide"));
-        Appartement appartement = appartementRepository.findById(request.appartementId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "appartementId invalide"));
+        Assigner assigner = assignerRepository.findById(request.assignerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "assignerId invalide"));
+        
 
         Facture facture = Facture.builder()
                 .issuedAt(request.issuedAt())
@@ -65,8 +62,7 @@ public class FactureServiceImpl implements FactureService {
                 .prixM3(request.prixM3())
                 .type(request.type())
                 .statut(request.statut())
-                .locataire(locataire)
-                .appartement(appartement)
+                .assigner(assigner)
                 .build();
 
         return toResponse(factureRepository.save(facture));
@@ -77,12 +73,8 @@ public class FactureServiceImpl implements FactureService {
     public FactureResponse update(UUID id, FactureUpdateRequest request) {
         Facture facture = factureRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Facture introuvable"));
-
-        Locataires locataire = locatairesRepository.findById(request.locataireId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "locataireId invalide"));
-        Appartement appartement = appartementRepository.findById(request.appartementId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "appartementId invalide"));
-
+        Assigner assigner = assignerRepository.findById(request.assignerId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "assignerId invalide"));
         facture.setIssuedAt(request.issuedAt());
         facture.setDuetAt(request.duetAt());
         facture.setAmount(request.amount());
@@ -91,8 +83,8 @@ public class FactureServiceImpl implements FactureService {
         facture.setPrixM3(request.prixM3());
         facture.setType(request.type());
         facture.setStatut(request.statut());
-        facture.setLocataire(locataire);
-        facture.setAppartement(appartement);
+        facture.setAssigner(assigner);
+       
 
         return toResponse(factureRepository.save(facture));
     }
@@ -107,8 +99,7 @@ public class FactureServiceImpl implements FactureService {
     }
 
     private static FactureResponse toResponse(Facture facture) {
-        UUID locataireId = facture.getLocataire() != null ? facture.getLocataire().getId() : null;
-        UUID appartementId = facture.getAppartement() != null ? facture.getAppartement().getId() : null;
+        UUID assignerId = facture.getAssigner() != null ? facture.getAssigner().getId() : null;
         return new FactureResponse(
                 facture.getId(),
                 facture.getIssuedAt(),
@@ -119,8 +110,8 @@ public class FactureServiceImpl implements FactureService {
                 facture.getPrixM3(),
                 facture.getType(),
                 facture.getStatut(),
-                locataireId,
-                appartementId
+                assignerId
+                
         );
     }
 }

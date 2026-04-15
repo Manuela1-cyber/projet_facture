@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Facture extends BaseUUIDEntity {
+public class Facture extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDate issuedAt;
@@ -42,16 +42,9 @@ public class Facture extends BaseUUIDEntity {
     @Column(nullable = false)
     private StatutFacture statut; 
 
-    
-   
-
     @ManyToOne
-    @JoinColumn(name = "locataire_id", nullable = false)
-    private Locataires locataire;
-
-    @ManyToOne
-    @JoinColumn(name = "appartement_id", nullable = false)
-    private Appartement appartement;
+    @JoinColumn(name = "assigner_id", nullable = false)
+    private Assigner assigner;
 }
 
 

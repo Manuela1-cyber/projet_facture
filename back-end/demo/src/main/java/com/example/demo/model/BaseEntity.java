@@ -9,7 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
-public abstract class BaseEntity{
+public abstract class BaseEntity extends BaseUUIDEntity {
 
     @Column(name ="created_at",nullable= false,updatable= false)
     protected OffsetDateTime createdAt;
