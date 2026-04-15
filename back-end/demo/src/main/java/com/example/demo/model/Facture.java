@@ -1,4 +1,5 @@
 package com.example.demo.model;
+
 import com.example.demo.model.enems.StatutFacture;
 import com.example.demo.model.enems.TypeFacture;
 
@@ -36,16 +37,13 @@ public class Facture extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TypeFacture type; 
+    private TypeFacture type;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatutFacture statut; 
+    private StatutFacture statut;
 
     @ManyToOne
     @JoinColumn(name = "assigner_id", nullable = false)
     private Assigner assigner;
 }
-
-
-    

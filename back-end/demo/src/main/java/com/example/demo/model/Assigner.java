@@ -23,19 +23,16 @@ public class Assigner extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "appartement_id", nullable = false)
     private Appartement appartement;
-    
 
     @Builder.Default()
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatutAssigner statut = StatutAssigner.ENTER; 
+    private StatutAssigner statut = StatutAssigner.ENTER;
 
-    @Column(name ="enter_at",nullable= false,updatable= false)
+    @Column(name = "enter_at", nullable = false, updatable = false)
     private OffsetDateTime enterAt;
 
-    @Column(name="exit_at",nullable=false)
+    @Column(name = "exit_at", nullable = false)
     private OffsetDateTime exitAt;
-
-
 
 }
