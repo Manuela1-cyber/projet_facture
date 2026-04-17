@@ -13,5 +13,6 @@ public interface FactureService {
     FactureResponse create(FactureCreateRequest request);
     FactureResponse update(UUID id, FactureUpdateRequest request);
     void delete(UUID id);
+    void sendFactureByEmail(UUID factureId);
 }
 

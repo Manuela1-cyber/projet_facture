@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.controller.payload.AssignerCreateRequest;
+import com.example.demo.controller.payload.AssignerExitRequest;
 import com.example.demo.controller.payload.AssignerResponse;
 import com.example.demo.model.Appartement;
 import com.example.demo.model.Assigner;
 import com.example.demo.model.Locataires;
+import com.example.demo.model.enems.StatutAssigner;
 import com.example.demo.repository.AppartementRepository;
 import com.example.demo.repository.AssignerRepository;
 import com.example.demo.repository.LocatairesRepository;
@@ -81,6 +83,18 @@ public class AssignerServiceImpl implements AssignerService {
                 .enterAt(now)
                 .exitAt(farFuture)
                 .build();
+
+        return toResponse(assignerRepository.save(assigner));
+    }
+
+    @Override
+    @Transactional
+    public AssignerResponse exit(UUID id, AssignerExitRequest request) {
+        Assigner assigner = assignerRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assigner introuvable"));
+
+        assigner.setExitAt(request.exitAt());
+        assigner.setStatut(StatutAssigner.EXIT);
 
         return toResponse(assignerRepository.save(assigner));
     }

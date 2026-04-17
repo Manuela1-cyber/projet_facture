@@ -19,8 +19,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: votre-email@gmail.com // Mets ton email ici après avoir créé un mot de passe d'application dans ton compte Google
-    password: votre-mot-de-passe-app // Mets ton mot de passe d'application ici
+    username: manuelafouedjio19@gmail.com
+    password: opli swxx cgcd uipz
     properties:
       mail:
         smtp:
@@ -34,7 +34,6 @@ spring:
 
 app:
   frontend:
-    url: http://localhost:3000
+    url: http://192.168.1.126:3000
   mail:
-    from: votre-email@gmail.com // Mets ton email ici après avoir créé un mot de passe d'application dans ton compte Google
-    from-name: Facturation App
+    from: manuelafouedjio19@gmail.com

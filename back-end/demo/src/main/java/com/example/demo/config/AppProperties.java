@@ -40,7 +40,7 @@ public class AppProperties {
 
     public static class Mail {
         private String from = "contact@tondomaine.com";
-        private String fromName = "Facturation App";
+        private String fromName = "Easy";
 
         public String getFrom() {
             return from;

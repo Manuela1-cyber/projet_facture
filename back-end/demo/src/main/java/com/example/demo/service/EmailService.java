@@ -33,7 +33,7 @@ public class EmailService {
     @Value("${app.mail.from:contact@tondomaine.com}")
     private String mailFrom;
 
-    @Value("${app.mail.from-name:Facturation App}")
+    @Value("${app.mail.from-name:Easy}")
     private String mailFromName;
 
     /**
@@ -70,7 +70,8 @@ public class EmailService {
             return;
         }
         try {
-            String paymentLink = buildPaymentLink(facture.getId());
+            String locataireId = facture.getAssigner().getLocataire().getId().toString();
+            String paymentLink = buildPaymentLink(locataireId, facture.getId());
             String html = buildFactureConfirmationHtml(facture, paymentLink);
             String subject = "Paiement de votre facture #" + facture.getId().toString().substring(0, 8);
             sendEmail(to, subject, html);
@@ -80,9 +81,9 @@ public class EmailService {
         }
     }
 
-    public String buildPaymentLink(java.util.UUID factureId) {
+    public String buildPaymentLink(String locataireId, java.util.UUID factureId) {
         String base = frontendUrl.endsWith("/") ? frontendUrl : frontendUrl + "/";
-        return base + "fact/" + factureId.toString();
+        return base + "fact/" + locataireId + "?factureId=" + factureId.toString();
     }
 
     public String buildFactureConfirmationHtml(Facture facture, String paymentLink) {
@@ -99,13 +100,13 @@ public class EmailService {
                 </head>
                 <body style="margin:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f4f4f5;">
                   <div style="max-width:560px;margin:0 auto;padding:24px;">
-                    <div style="background:linear-gradient(135deg,#1e3a5f 0%%,#2d5a87 100%%);border-radius:12px 12px 0 0;padding:28px 24px;text-align:center;">
+                    <div style="background-color:#8352A5;border-radius:12px 12px 0 0;padding:28px 24px;text-align:center;">
                       <h1 style="margin:0;color:#fff;font-size:22px;font-weight:600;">Paiement de votre facture</h1>
                       <p style="margin:8px 0 0;color:rgba(255,255,255,0.9);font-size:14px;">Merci pour votre confiance</p>
                     </div>
-                    <div style="background:#fff;border-radius:0 0 12px 12px;padding:24px;box-shadow:0 4px 6px rgba(0,0,0,0.07);">
+                    <div style="background:#fff;border-radius:0 0 12px 12px;padding:24px;box-shadow:0 4px 6px #8352A5;">
                       <p style="margin:0 0 16px;color:#374151;font-size:15px;">Bonjour,</p>
-                      <p style="margin:0 0 20px;color:#6b7280;font-size:14px;line-height:1.5;">Votre facture est déjà prête. Voici le lien pour effectuer le paiement.</p>
+                      <p style="margin:0 0 20px;color:#6b7280;font-size:14px;line-height:1.5;">Votre facture est déjà disponible. Voici le lien pour effectuer le paiement.</p>
                       <div style="background:#f8fafc;border-radius:8px;padding:16px;margin-bottom:20px;">
                         <p style="margin:0 0 4px;font-size:12px;color:#64748b;">N° facture</p>
                         <p style="margin:0;font-size:18px;font-weight:600;color:#1e3a5f;">#%s</p>
@@ -113,11 +114,11 @@ public class EmailService {
                         <p style="margin:0;font-size:14px;color:#374151;">%s</p>
                       </div>
                       <div style="margin-top:24px;text-align:center;">
-                        <a href="%s" style="display:inline-block;background:linear-gradient(135deg,#1e3a5f 0%%,#2d5a87 100%%);color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:600;font-size:15px;">Payer cette facture</a>
+                        <a href="%s" style="display:inline-block;background-color:#8352A5;color:#fff;text-decoration:none;padding:14px 28px;border-radius:8px;font-weight:600;font-size:15px;">Payer cette facture</a>
                       </div>
                       <p style="margin:20px 0 0;font-size:12px;color:#94a3b8;text-align:center;">Si le bouton ne s'affiche pas, copiez ce lien : %s</p>
                     </div>
-                    <p style="margin:16px 0 0;text-align:center;font-size:12px;color:#94a3b8;">Facturation app — Paiement de facture</p>
+                    <p style="margin:16px 0 0;text-align:center;font-size:12px;color:#94a3b8;">Easy — Paiement de facture</p>
                   </div>
                 </body>
                 </html>

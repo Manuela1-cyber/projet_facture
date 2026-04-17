@@ -52,5 +52,11 @@ public class FactureController {
     public void delete(@PathVariable UUID id) {
         factureService.delete(id);
     }
+
+    @PostMapping("/{id}/send-email")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendFactureByEmail(@PathVariable UUID id) {
+        factureService.sendFactureByEmail(id);
+    }
 }
 

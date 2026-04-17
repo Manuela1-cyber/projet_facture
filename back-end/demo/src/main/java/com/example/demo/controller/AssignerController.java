@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.controller.payload.AssignerCreateRequest;
+import com.example.demo.controller.payload.AssignerExitRequest;
 import com.example.demo.controller.payload.AssignerResponse;
 import com.example.demo.service.AssignerService;
 
@@ -49,5 +50,10 @@ public class AssignerController {
     @ResponseStatus(HttpStatus.CREATED)
     public AssignerResponse create(@Valid @RequestBody AssignerCreateRequest request) {
         return assignerService.create(request);
+    }
+
+    @PutMapping("/{id}/exit")
+    public AssignerResponse exit(@PathVariable UUID id, @Valid @RequestBody AssignerExitRequest request) {
+        return assignerService.exit(id, request);
     }
 }

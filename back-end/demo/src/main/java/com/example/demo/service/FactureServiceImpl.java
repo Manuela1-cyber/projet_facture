@@ -22,15 +22,18 @@ public class FactureServiceImpl implements FactureService {
 
     private final FactureRepository factureRepository;
     private final AssignerRepository assignerRepository;
+    private final EmailService emailService;
  
 
     public FactureServiceImpl(
             FactureRepository factureRepository,
-            AssignerRepository assignerRepository
+            AssignerRepository assignerRepository,
+            EmailService emailService
         
     ) {
         this.factureRepository = factureRepository;
         this.assignerRepository = assignerRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -96,6 +99,21 @@ public class FactureServiceImpl implements FactureService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Facture introuvable");
         }
         factureRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void sendFactureByEmail(UUID factureId) {
+        Facture facture = factureRepository.findById(factureId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Facture introuvable"));
+        
+        String locataireEmail = facture.getAssigner().getLocataire().getEmail();
+        
+        if (locataireEmail == null || locataireEmail.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email du locataire non disponible");
+        }
+        
+        emailService.sendFactureConfirmationEmail(locataireEmail, facture);
     }
 
     private static FactureResponse toResponse(Facture facture) {
