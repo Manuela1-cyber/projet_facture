@@ -83,7 +83,7 @@ public class EmailService {
 
     public String buildPaymentLink(String locataireId, java.util.UUID factureId) {
         String base = frontendUrl.endsWith("/") ? frontendUrl : frontendUrl + "/";
-        return base + "fact/" + locataireId + "?factureId=" + factureId.toString();
+        return base + "espace-locataire/" + locataireId + "?factureId=" + factureId.toString();
     }
 
     public String buildFactureConfirmationHtml(Facture facture, String paymentLink) {

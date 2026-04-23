@@ -36,6 +36,11 @@ public class FactureController {
         return factureService.get(id);
     }
 
+    @GetMapping("/{id}/portal")
+    public FactureResponse getForLocataire(@PathVariable UUID id, @RequestParam UUID locataireId) {
+        return factureService.getForLocataire(id, locataireId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FactureResponse create(@Valid @RequestBody FactureCreateRequest request) {

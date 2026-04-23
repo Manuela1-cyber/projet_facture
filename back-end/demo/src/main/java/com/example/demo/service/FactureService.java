@@ -10,6 +10,7 @@ import com.example.demo.controller.payload.FactureUpdateRequest;
 public interface FactureService {
     List<FactureResponse> list();
     FactureResponse get(UUID id);
+    FactureResponse getForLocataire(UUID id, UUID locataireId);
     FactureResponse create(FactureCreateRequest request);
     FactureResponse update(UUID id, FactureUpdateRequest request);
     void delete(UUID id);

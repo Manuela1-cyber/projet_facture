@@ -3,7 +3,16 @@ package com.example.demo.model;
 import com.example.demo.model.enems.UserRole;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.*; 
+
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -13,7 +22,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class User extends BaseUUIDEntity { 
+//    public class User extends BaseUUIDEntity  { 
+ public class User extends BaseUUIDEntity implements UserDetails {
 
     @Column(nullable = false)
     private String name;
@@ -32,7 +42,45 @@ public class User extends BaseUUIDEntity {
     private boolean isActive = true;
 
     @Builder.Default
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private UserRole role = UserRole.LOCATAIRE;
-}
+    @Column(nullable = false)
+    private boolean loggedIn = false;
+
+    @Column
+    private LocalDateTime sessionExpiresAt;
+
+     @Builder.Default
+     @Enumerated(EnumType.STRING)
+     @Column(name = "role", nullable = false)
+    // private UserRole role = UserRole.LOCATAIRE;
+     private UserRole role = UserRole.BAILLEUR;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive;
+    }
+ }

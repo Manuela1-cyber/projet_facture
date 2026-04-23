@@ -50,6 +50,24 @@ public class FactureServiceImpl implements FactureService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public FactureResponse getForLocataire(UUID id, UUID locataireId) {
+        Facture facture = factureRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Facture introuvable"));
+
+        UUID factureLocataireId = facture.getAssigner() != null
+                && facture.getAssigner().getLocataire() != null
+                        ? facture.getAssigner().getLocataire().getId()
+                        : null;
+
+        if (factureLocataireId == null || !factureLocataireId.equals(locataireId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Facture introuvable pour ce locataire");
+        }
+
+        return toResponse(facture);
+    }
+
+    @Override
     @Transactional
     public FactureResponse create(FactureCreateRequest request) {
         Assigner assigner = assignerRepository.findById(request.assignerId())

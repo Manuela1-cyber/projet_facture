@@ -37,3 +37,9 @@ app:
     url: http://192.168.1.126:3000
   mail:
     from: manuelafouedjio19@gmail.com
+
+security:
+  jwt:
+    secret-key: MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=
+    expiration-time: 86400000
+
