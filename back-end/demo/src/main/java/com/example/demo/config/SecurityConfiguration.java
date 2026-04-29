@@ -39,10 +39,15 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**").permitAll()
-                        // Locataire sans compte : GET/PUT uniquement sur une facture par son UUID (pas GET /api/factures)
-                        .requestMatchers(HttpMethod.GET, "/api/factures/*").permitAll()
+                        // Locataire sans compte : GET/PUT uniquement sur une facture par son UUID (pas
+                        // GET /api/factures)
+                        .requestMatchers(HttpMethod.GET, "/api/factures/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/factures/*/portal").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/factures/*").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/factures/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/locataires/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/appartements/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/proprietes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/assignations/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

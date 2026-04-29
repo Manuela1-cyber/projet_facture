@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.controller.payload.AssignerCreateRequest;
+import com.example.demo.controller.payload.AssignerDetailedResponse;
 import com.example.demo.controller.payload.AssignerExitRequest;
 import com.example.demo.controller.payload.AssignerResponse;
 import com.example.demo.service.AssignerService;
@@ -29,6 +30,11 @@ public class AssignerController {
     @GetMapping
     public List<AssignerResponse> list() {
         return assignerService.list();
+    }
+
+    @GetMapping("/detailed")
+    public List<AssignerDetailedResponse> listDetailed() {
+        return assignerService.listDetailed();
     }
 
     @GetMapping("/{id}")

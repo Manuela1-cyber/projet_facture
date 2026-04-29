@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.controller.payload.AssignerCreateRequest;
+import com.example.demo.controller.payload.AssignerDetailedResponse;
+import com.example.demo.controller.payload.AssignerDetailedResponse.AppartementSimpleResponse;
+import com.example.demo.controller.payload.AssignerDetailedResponse.LocalataireResponse;
 import com.example.demo.controller.payload.AssignerExitRequest;
 import com.example.demo.controller.payload.AssignerResponse;
 import com.example.demo.model.Appartement;
@@ -38,6 +41,14 @@ public class AssignerServiceImpl implements AssignerService {
     public List<AssignerResponse> list() {
         return assignerRepository.findAll().stream()
                 .map(AssignerServiceImpl::toResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<AssignerDetailedResponse> listDetailed() {
+        return assignerRepository.findAll().stream()
+                .map(AssignerServiceImpl::toDetailedResponse)
                 .toList();
     }
 
@@ -84,7 +95,13 @@ public class AssignerServiceImpl implements AssignerService {
                 .exitAt(farFuture)
                 .build();
 
-        return toResponse(assignerRepository.save(assigner));
+        Assigner savedAssigner = assignerRepository.save(assigner);
+        
+        // Mettre à jour le champ locataire de l'Appartement pour la synchronisation
+        appartement.setLocataire(locataire);
+        appartementRepository.save(appartement);
+
+        return toResponse(savedAssigner);
     }
 
     @Override
@@ -96,7 +113,16 @@ public class AssignerServiceImpl implements AssignerService {
         assigner.setExitAt(request.exitAt());
         assigner.setStatut(StatutAssigner.EXIT);
 
-        return toResponse(assignerRepository.save(assigner));
+        Assigner savedAssigner = assignerRepository.save(assigner);
+        
+        // Libérer l'Appartement en mettant le locataire à NULL
+        Appartement appartement = assigner.getAppartement();
+        if (appartement != null) {
+            appartement.setLocataire(null);
+            appartementRepository.save(appartement);
+        }
+
+        return toResponse(savedAssigner);
     }
 
     private static AssignerResponse toResponse(Assigner assigner) {
@@ -106,6 +132,36 @@ public class AssignerServiceImpl implements AssignerService {
                 assigner.getId(),
                 locataireId,
                 appartementId,
+                assigner.getStatut(),
+                assigner.getEnterAt(),
+                assigner.getExitAt()
+        );
+    }
+
+    private static AssignerDetailedResponse toDetailedResponse(Assigner assigner) {
+        LocalataireResponse locataire = null;
+        AppartementSimpleResponse appartement = null;
+
+        if (assigner.getLocataire() != null) {
+            locataire = new LocalataireResponse(
+                    assigner.getLocataire().getId(),
+                    assigner.getLocataire().getName(),
+                    assigner.getLocataire().getPhone(),
+                    assigner.getLocataire().getEmail()
+            );
+        }
+
+        if (assigner.getAppartement() != null) {
+            appartement = new AppartementSimpleResponse(
+                    assigner.getAppartement().getId(),
+                    assigner.getAppartement().getNom()
+            );
+        }
+
+        return new AssignerDetailedResponse(
+                assigner.getId(),
+                locataire,
+                appartement,
                 assigner.getStatut(),
                 assigner.getEnterAt(),
                 assigner.getExitAt()

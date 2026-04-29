@@ -50,7 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        if (path.startsWith("/auth/") ||
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod()) ||
+                path.startsWith("/api/auth") ||
                 path.startsWith("/swagger-ui") ||
                 path.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
@@ -97,10 +98,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     }
                 });
             }
+            if (isPublicReadEndpoint(request)) {
+                SecurityContextHolder.clearContext();
+                filterChain.doFilter(request, response);
+                return;
+            }
             handlerExceptionResolver.resolveException(request, response, null, expiredJwtException);
         } catch (Exception exception) {
+            if (isPublicReadEndpoint(request)) {
+                SecurityContextHolder.clearContext();
+                filterChain.doFilter(request, response);
+                return;
+            }
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
+    }
+
+    private boolean isPublicReadEndpoint(HttpServletRequest request) {
+        if (!"GET".equalsIgnoreCase(request.getMethod())) {
+            return false;
+        }
+
+        String path = request.getRequestURI();
+        return path.startsWith("/api/factures")
+                || path.startsWith("/api/locataires")
+                || path.startsWith("/api/appartements")
+                || path.startsWith("/api/proprietes")
+                || path.startsWith("/api/assignations");
     }
 }
 

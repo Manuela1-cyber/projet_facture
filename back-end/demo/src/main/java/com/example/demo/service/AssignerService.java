@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.demo.controller.payload.AssignerCreateRequest;
+import com.example.demo.controller.payload.AssignerDetailedResponse;
 import com.example.demo.controller.payload.AssignerExitRequest;
 import com.example.demo.controller.payload.AssignerResponse;
 
 public interface AssignerService {
     List<AssignerResponse> list();
+    
+    List<AssignerDetailedResponse> listDetailed();
     
     AssignerResponse get(UUID id);
     

@@ -34,7 +34,7 @@ spring:
 
 app:
   frontend:
-    url: http://192.168.1.126:3000
+    url: http://localhost:3000
   mail:
     from: manuelafouedjio19@gmail.com
 
